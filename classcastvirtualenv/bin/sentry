@@ -1,0 +1,10 @@
+#!/home/ubuntu/classcast/classcastvirtualenv/bin/python
+# EASY-INSTALL-ENTRY-SCRIPT: 'django-sentry==1.13.5','console_scripts','sentry'
+__requires__ = 'django-sentry==1.13.5'
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('django-sentry==1.13.5', 'console_scripts', 'sentry')()
+    )
