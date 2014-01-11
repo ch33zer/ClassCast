@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+{% block head %}
+    <script src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+    <script>
+        $(function() {
+            var flashvars = {server : "{{server|safe}}",
+                            stream : "{{stream|safe}}",
+                            streamkey : "{{streamkey|safe}}",
+                            classslug : "{{class.slug|safe}}"
+                            };
+            var params = {};
+            var attributes = {};
+            swfobject.embedSWF("{% static 'webcam/webcam.swf' %}", "swfdiv", "640", "480", "9.0.0","", flashvars, params, attributes);
+        })
+    </script>
+{% endblock %}
+{% block content %}
+<h3>
+    Stream of {{class.name}}
+</h3>
+<div id="swfdiv">
+    <p>Loading the streamer...</p>
+</div>
+{% endblock %}

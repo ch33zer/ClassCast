@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load bootstrap3 %}
+{% load static %}
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	{% bootstrap_javascript True%}
+	{% bootstrap_css %}
+	<script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+	<script src="{% static 'js/bootstrap3-typeahead.min.js' %}"></script>
+	<script src="{% static 'js/jquery.cookie.js' %}"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/datepicker.css' %}">
+
+	<!--Classcast stuff-->
+	<script src="{% static 'js/classcast.js' %}"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/classcast.css' %}">
+	{% if user.is_authenticated %}
+	<script>
+		userclasses=[{% for class in user.ccuser.classes.all %} "{{class.slug}}", {% endfor %}];
+	</script>
+	{% endif %}
+	{% block head %}
+	{% endblock%}
+</head>
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/">ClassCast</a>
+		</div>
+		<div class="" id="bs-example-navbar-content">
+		{% if user.is_authenticated %}
+			<ul class="nav navbar-nav">
+				<li><a href="{% url 'classcast:schoolview' user.ccuser.school.slug %}">My School</a></li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">My Classes<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						{% for class in user.ccuser.classes.all %}
+							<li><a href="{% url 'classcast:classview' class.slug %}">{{class.name}}</a></li>
+						{% endfor %}
+					</ul>
+				</li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="{% url 'classcast:userview' user.ccuser.pk %}">{{user.username}}</a></li>
+					<li class="divider"></li>
+					<li><a href="{% url 'classcast:logoutview' %}">Logout</a></li>
+				</ul>
+				</li>
+			</ul>
+		{% else %}
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a href="{% url 'classcast:loginview' %}">Login</a>
+				</li>
+				<li>
+					<a href="{% url 'classcast:registerview' %}">Register</a>
+				</li>
+			</ul>
+		{% endif%}
+		</div><!-- /.navbar-collapse -->
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				{% bootstrap_messages %}
+				{% block content %}
+				{% endblock %}
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

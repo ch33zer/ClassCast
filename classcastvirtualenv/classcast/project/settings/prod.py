@@ -11,7 +11,8 @@ COMPRESS_ENABLED = (ENV_SETTING('COMPRESS_ENABLED', 'true') == 'true')
 # to hardcoded values
 try:
     import dj_database_url
-    DATABASES = {'default': dj_database_url.config()}
+    DATABASES = {'default': dj_database_url.config(
+        default='mysql://root@localhost/classcast')}
 except ImportError:
     DATABASES = {}
 

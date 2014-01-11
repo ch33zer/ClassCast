@@ -1,0 +1,3 @@
+#!/bin/bash
+echo 'drop database classcastdev; create database classcastdev;' | ./manage.py dbshell
+./manage.py syncdb

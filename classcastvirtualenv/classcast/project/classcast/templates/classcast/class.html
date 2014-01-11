@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+{% block head %}
+	<!--jwplayer-->
+	<script type="text/javascript" src="{% static 'jwplayer/jwplayer.js' %}"></script>
+	<script type="text/javascript">jwplayer.key="yXrSWQ72tcFErtzAqsQc4arK7sCwYJvfVGnIgw==";</script>
+{% endblock %}
+{% block content %}
+<h3>
+{{class.name}}
+</h3>
+<div class="clearfix">
+  <div>
+  	{% include 'widgets/addclasswidget.html' with slug=class.slug classes="pull-right" %}
+  </div>
+  <div>
+    {% buttons %}
+    <a class="btn btn-default pull-right" href="{% url 'classcast:streamview' class.slug %}">Stream this class</a>
+    {% endbuttons %}
+  </div>
+</div>
+<h4>
+  Active Streams ({{class.stream_set.all|length}} available)
+</h4>
+{% if class.stream_set.all %}
+<div id="stream-carousel" class="carousel slide clearfix" data-ride="carousel" style="width:640px;margin:0px auto">
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    	{% for stream in class.stream_set.all %}
+      <div class="item{% if forloop.first%} active{% endif %}">
+        <div class="inner-item" style="text-align:center;margin:30px 80px">
+			   <div id="streamdiv-{{ forloop.counter }}"></div>
+        </div>
+      </div>
+		  {% endfor %}
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#stream-carousel" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#stream-carousel" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
+
+{% for stream in class.stream_set.all %}
+<script>
+	jwplayer("streamdiv-{{ forloop.counter }}").setup({
+	    file: "rtmp://54.193.77.36/{{stream.relative_name}}?viewkey={{user.ccuser.viewkey}}",
+	    image: "{% static 'jwplayer/classcast.png' %}"
+	});
+
+</script>
+{% endfor %}
+{% endif %}
+<h4>
+  Class Content
+</h4>
+<p class="text-left">
+	<a href="{% url 'classcast:addcontentview' class.slug %}">{% bootstrap_icon 'plus-sign' %} Add Content</a>
+</p>
+<table class="table table-striped">
+	<tr>
+		<th>Name</th>
+		<th>Date</th>
+	</tr>
+	{% for content in class.content_set.all %}
+		<tr><td><div><a href="{{content.content.url}}"> {{content.name}} </a></div><div><a href="{% url 'classcast:contentview' content.slug %}"><small>details</small></a></div></td><td>{{content.userDate}}</td></tr>
+	{% endfor %}
+</table>
+
+{% endblock %}

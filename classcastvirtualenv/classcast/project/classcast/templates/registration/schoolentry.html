@@ -1,0 +1,15 @@
+{% extends "registration/register.html"%}
+{% block content %}
+	<div>
+		We haven't seen this email before! Start typing the name of your school below and if it shows up, select it. Otherwise, just enter the full name of the school (eg: Johns Hopkins University). Be careful, you will only be able to access content from your school, so if you create a new school when yours already exists, you won't see any other content!
+	</div>
+	{{block.super}}
+	<script>
+		$(function(){
+			var schools = {{ schools|safe }};
+			$( "#id_schoolform-school_name" ).typeahead({ source:schools});
+			$( "#id_schoolform-school_name" ).attr('autocomplete','off');
+		  }
+		);
+	</script>
+{% endblock %}

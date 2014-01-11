@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% block content %}
+<h3>
+	{{school.name}}
+</h3>
+<p class="text-left">
+	<a href="{% url 'classcast:createclassview' %}">{% bootstrap_icon 'plus-sign' %} Create a new class</a>
+</p>
+<table class="table table-striped">
+	<tr>
+		<th>Classname</th>
+		<th>Members</th>
+		<th></th>
+	</tr>
+	{% for class in school.class_set.all %}
+		<tr><td><a href="{% url 'classcast:classview' class.slug %}"> {{class.name}} </a></td><td>{{class.num_users}}</td><td>{% include 'widgets/addclasswidget.html' with slug=class.slug %}</td></tr>
+	{% endfor %}
+</table>
+
+{% endblock %}
